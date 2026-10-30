@@ -7,33 +7,89 @@
   <div class="meta">
     <span class="chip mono">{{ detail.summary.arch }}</span>
     <span class="chip">{{ detail.summary.functionCount }} functions</span>
+    <span class="chip">{{ detail.strings.length }} strings</span>
+    <span class="chip">{{ detail.imports.length }} imports</span>
     <span class="chip">{{ detail.summary.status }}</span>
   </div>
 </header>
 
-<div class="split" *ngIf="detail">
-  <aside class="functions">
-    <h3>Functions</h3>
-    <ul>
-      <li
-        *ngFor="let fn of detail.functions"
-        [class.active]="fn.address === selectedAddress"
-        (click)="select(fn)"
-      >
-        <span class="fn-name mono">{{ fn.name }}</span>
-        <span class="fn-addr mono">{{ fn.address }}</span>
-      </li>
-    </ul>
-  </aside>
+<nav class="tabs" *ngIf="detail">
+  <button [class.active]="tab === 'functions'" (click)="setTab('functions')">Functions</button>
+  <button [class.active]="tab === 'strings'" (click)="setTab('strings')">Strings</button>
+  <button [class.active]="tab === 'imports'" (click)="setTab('imports')">Imports</button>
+  <button [class.active]="tab === 'graph'" (click)="setTab('graph')">Call graph</button>
+</nav>
 
-  <section class="code">
-    <p *ngIf="loadingCode">Decompiling…</p>
-    <ng-container *ngIf="selected && !loadingCode">
-      <div class="code-head">
-        <span class="mono">{{ selected.signature }}</span>
-        <span class="addr mono">{{ selected.address }}</span>
-      </div>
-      <pre class="mono">{{ selected.code }}</pre>
-    </ng-container>
+<div *ngIf="detail">
+  <!-- Functions -->
+  <div class="split" *ngIf="tab === 'functions'">
+    <aside class="functions">
+      <ul>
+        <li
+          *ngFor="let fn of detail.functions"
+          [class.active]="fn.address === selectedAddress"
+          (click)="select(fn)"
+        >
+          <span class="fn-name mono">{{ fn.name }}</span>
+          <span class="fn-addr mono">{{ fn.address }}</span>
+        </li>
+      </ul>
+    </aside>
+
+    <section class="code">
+      <p *ngIf="loadingCode">Decompiling…</p>
+      <ng-container *ngIf="selected && !loadingCode">
+        <div class="code-head">
+          <span class="mono">{{ selected.signature }}</span>
+          <button class="ai" (click)="explain()" [disabled]="explaining">
+            {{ explaining ? 'Analysing…' : '✦ Explain with AI' }}
+          </button>
+        </div>
+
+        <div class="explanation" *ngIf="explanation">
+          <div class="explanation-head">
+            <span class="suggested mono">{{ explanation.suggestedName }}</span>
+            <span class="source">{{ explanation.source }}</span>
+          </div>
+          <p>{{ explanation.summary }}</p>
+        </div>
+
+        <pre class="mono">{{ selected.code }}</pre>
+      </ng-container>
+    </section>
+  </div>
+
+  <!-- Strings -->
+  <section *ngIf="tab === 'strings'">
+    <p class="muted" *ngIf="detail.strings.length === 0">No strings found.</p>
+    <table *ngIf="detail.strings.length > 0">
+      <thead><tr><th>Address</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let s of detail.strings">
+          <td class="mono addr">{{ s.address }}</td>
+          <td class="mono">{{ s.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Imports -->
+  <section *ngIf="tab === 'imports'">
+    <p class="muted" *ngIf="detail.imports.length === 0">No imports found.</p>
+    <table *ngIf="detail.imports.length > 0">
+      <thead><tr><th>Symbol</th><th>Library</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let i of detail.imports">
+          <td class="mono">{{ i.name }}</td>
+          <td class="mono muted">{{ i.library }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Call graph -->
+  <section *ngIf="tab === 'graph'">
+    <p class="muted">Nodes are functions; edges are calls. Drag to explore.</p>
+    <div #graphContainer class="graph"></div>
   </section>
 </div>

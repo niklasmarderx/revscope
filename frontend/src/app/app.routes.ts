@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { AnalysisListComponent } from './analysis-list/analysis-list.component';
-import { AnalysisDetailComponent } from './analysis-detail/analysis-detail.component';
 
 export const routes: Routes = [
-  { path: '', component: AnalysisListComponent },
-  { path: 'analyses/:id', component: AnalysisDetailComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./analysis-list/analysis-list.component').then((m) => m.AnalysisListComponent),
+  },
+  {
+    path: 'analyses/:id',
+    loadComponent: () =>
+      import('./analysis-detail/analysis-detail.component').then((m) => m.AnalysisDetailComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -7,4 +7,7 @@ import java.util.Map;
 public record AnalysisResult(
         String arch,
         List<FunctionSummary> functions,
-        Map<String, DecompiledFunction> decompiled) {}
+        Map<String, DecompiledFunction> decompiled,
+        List<StringRef> strings,
+        List<ImportRef> imports,
+        List<CallEdge> callGraph) {}

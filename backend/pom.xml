@@ -49,10 +49,39 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+			<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.anthropic</groupId>
+			<artifactId>anthropic-java</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- exFAT volumes create AppleDouble ._* sidecar files; never treat them as tests. -->
+					<excludes>
+						<exclude>**/._*</exclude>
+						<exclude>**/*$*</exclude>
+					</excludes>
+					<systemPropertyVariables>
+						<!-- Let Spring skip the malformed ._* class files during classpath scanning. -->
+						<spring.classformat.ignore>true</spring.classformat.ignore>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

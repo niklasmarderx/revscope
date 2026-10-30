@@ -3,6 +3,9 @@ package dev.niklasmarder.revscope.service;
 import dev.niklasmarder.revscope.model.AnalysisResult;
 import dev.niklasmarder.revscope.model.DecompiledFunction;
 import dev.niklasmarder.revscope.model.FunctionSummary;
+import dev.niklasmarder.revscope.model.CallEdge;
+import dev.niklasmarder.revscope.model.ImportRef;
+import dev.niklasmarder.revscope.model.StringRef;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 
@@ -89,7 +92,35 @@ public class HeadlessGhidraService implements GhidraService {
                 }
             }
         }
-        return new AnalysisResult(arch, functions, decompiled);
+
+        List<StringRef> strings = new ArrayList<>();
+        if (root.get("strings") instanceof List<?> list) {
+            for (Object item : list) {
+                if (item instanceof Map<?, ?> s) {
+                    strings.add(new StringRef(str(s.get("address")), str(s.get("value"))));
+                }
+            }
+        }
+
+        List<ImportRef> imports = new ArrayList<>();
+        if (root.get("imports") instanceof List<?> list) {
+            for (Object item : list) {
+                if (item instanceof Map<?, ?> i) {
+                    imports.add(new ImportRef(str(i.get("name")), str(i.get("library"))));
+                }
+            }
+        }
+
+        List<CallEdge> callGraph = new ArrayList<>();
+        if (root.get("callGraph") instanceof List<?> list) {
+            for (Object item : list) {
+                if (item instanceof Map<?, ?> e) {
+                    callGraph.add(new CallEdge(str(e.get("from")), str(e.get("to"))));
+                }
+            }
+        }
+
+        return new AnalysisResult(arch, functions, decompiled, strings, imports, callGraph);
     }
 
     private static String sanitize(String fileName) {

@@ -1,7 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AnalysisDetail, AnalysisSummary, DecompiledFunction } from './models';
+import {
+  AnalysisDetail,
+  AnalysisSummary,
+  DecompiledFunction,
+  FunctionExplanation,
+} from './models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -25,6 +30,13 @@ export class ApiService {
   decompiled(id: string, address: string): Observable<DecompiledFunction> {
     return this.http.get<DecompiledFunction>(
       `${this.base}/analyses/${id}/functions/${encodeURIComponent(address)}`,
+    );
+  }
+
+  explain(id: string, address: string): Observable<FunctionExplanation> {
+    return this.http.post<FunctionExplanation>(
+      `${this.base}/analyses/${id}/functions/${encodeURIComponent(address)}/explain`,
+      {},
     );
   }
 }
