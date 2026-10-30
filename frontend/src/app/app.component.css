@@ -1,0 +1,27 @@
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  background: #11151c;
+  border-bottom: 1px solid #222a35;
+}
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e6edf3;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.logo {
+  color: #4cc2ff;
+}
+.tagline {
+  color: #7d8793;
+  font-size: 0.85rem;
+}
+.content {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}

@@ -1,0 +1,39 @@
+<p class="error" *ngIf="error">{{ error }}</p>
+
+<a routerLink="/" class="back">&larr; All analyses</a>
+
+<header class="detail-head" *ngIf="detail">
+  <h2 class="mono">{{ detail.summary.fileName }}</h2>
+  <div class="meta">
+    <span class="chip mono">{{ detail.summary.arch }}</span>
+    <span class="chip">{{ detail.summary.functionCount }} functions</span>
+    <span class="chip">{{ detail.summary.status }}</span>
+  </div>
+</header>
+
+<div class="split" *ngIf="detail">
+  <aside class="functions">
+    <h3>Functions</h3>
+    <ul>
+      <li
+        *ngFor="let fn of detail.functions"
+        [class.active]="fn.address === selectedAddress"
+        (click)="select(fn)"
+      >
+        <span class="fn-name mono">{{ fn.name }}</span>
+        <span class="fn-addr mono">{{ fn.address }}</span>
+      </li>
+    </ul>
+  </aside>
+
+  <section class="code">
+    <p *ngIf="loadingCode">Decompiling…</p>
+    <ng-container *ngIf="selected && !loadingCode">
+      <div class="code-head">
+        <span class="mono">{{ selected.signature }}</span>
+        <span class="addr mono">{{ selected.address }}</span>
+      </div>
+      <pre class="mono">{{ selected.code }}</pre>
+    </ng-container>
+  </section>
+</div>

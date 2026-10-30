@@ -1,0 +1,39 @@
+<section class="upload-card">
+  <h2>Analyse a binary</h2>
+  <p>Upload an executable. revscope runs Ghidra analysis and lets you browse its functions and decompiled code.</p>
+  <div class="upload-row">
+    <input type="file" (change)="onFileSelected($event)" />
+    <button (click)="upload()" [disabled]="!selectedFile || uploading">
+      {{ uploading ? 'Analysing…' : 'Analyse' }}
+    </button>
+  </div>
+</section>
+
+<p class="error" *ngIf="error">{{ error }}</p>
+
+<section>
+  <div class="section-head">
+    <h2>Analyses</h2>
+    <button class="ghost" (click)="refresh()">Refresh</button>
+  </div>
+
+  <p *ngIf="loading">Loading…</p>
+  <p class="muted" *ngIf="!loading && analyses.length === 0">No analyses yet. Upload a binary to get started.</p>
+
+  <table *ngIf="analyses.length > 0">
+    <thead>
+      <tr>
+        <th>File</th><th>Architecture</th><th>Functions</th><th>Status</th><th>Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of analyses" [routerLink]="['/analyses', a.id]" class="clickable">
+        <td class="mono">{{ a.fileName }}</td>
+        <td class="mono">{{ a.arch }}</td>
+        <td>{{ a.functionCount }}</td>
+        <td>{{ a.status }}</td>
+        <td>{{ a.fileSize }} B</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

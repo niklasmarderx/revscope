@@ -1,0 +1,13 @@
+# macOS AppleDouble sidecar files (this volume creates them everywhere)
+._*
+.DS_Store
+.AppleDouble
+
+# Logs
+*.log
+
+# Build output (also covered by per-module .gitignore)
+backend/target/
+frontend/dist/
+frontend/.angular/
+node_modules/

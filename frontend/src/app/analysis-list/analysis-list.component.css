@@ -1,0 +1,25 @@
+.upload-card {
+  background: #11151c;
+  border: 1px solid #222a35;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.upload-card h2 { margin: 0 0 0.3rem; }
+.upload-card p { color: #8b95a1; margin: 0 0 1rem; }
+.upload-row { display: flex; gap: 0.75rem; align-items: center; }
+button {
+  background: #1f6feb; color: #fff; border: none; border-radius: 6px;
+  padding: 0.5rem 1rem; cursor: pointer; font-weight: 600;
+}
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.ghost { background: transparent; border: 1px solid #2d3745; color: #c9d1d9; }
+.section-head { display: flex; justify-content: space-between; align-items: center; }
+.error { color: #ff7b72; }
+.muted { color: #8b95a1; }
+table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+th, td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid #222a35; }
+th { color: #8b95a1; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+tr.clickable { cursor: pointer; }
+tr.clickable:hover td { background: #161b22; }
+.mono { font-family: 'SFMono-Regular', ui-monospace, monospace; }
