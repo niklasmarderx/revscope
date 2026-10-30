@@ -5,11 +5,23 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    groups:
+      spring:
+        patterns: ["org.springframework*"]
+
   - package-ecosystem: npm
     directory: "/frontend"
     schedule:
       interval: weekly
       day: monday
+    # Angular majors require a coordinated `ng update`, not an automated bump.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      angular:
+        patterns: ["@angular*", "@angular-devkit*"]
+
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
